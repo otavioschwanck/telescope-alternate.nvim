@@ -5,17 +5,16 @@ function M.setup(opts)
     vim.notify("Please inform the mappings on your telescope-alternate setup")
   end
 
-  vim.g.telescope_alternate_mappings = opts.mappings or {}
-end
+  local mappings = opts.mappings or {}
+  local enabled_presets = opts.presets or {}
+  local presets = require('telescope-alternate.presets')
 
-M.setup({ mappings = {
-  { "lua/(.+)/(.+).lua", {
-    "lua/telescope/_extensions/telescope-alternate.lua",
-    "lua/tests/[1:singularize]/[2:pluralize]/[2:singularize]_test/[2].lua",
-    "lua/",
-    "cachorro/",
-    ".luarc.json"
-  } }
-} })
+  for i = 1, #enabled_presets, 1 do
+    for k,v in pairs(presets[enabled_presets[i]]) do mappings[k] = v end
+  end
+
+  vim.g.telescope_alternate_transformers = opts.transformers
+  vim.g.telescope_alternate_mappings = mappings
+end
 
 return M
