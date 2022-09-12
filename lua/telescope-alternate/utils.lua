@@ -4,6 +4,34 @@ function M.isdir(path)
   return vim.fn.isdirectory(path)
 end
 
+function M.capture(path)
+  local s = vim.fn.system("find " .. path)
+
+  if string.match(s, 'no matches found:') then
+    return {}
+  end
+
+  s = string.gsub(s, '^%s+', '')
+  s = string.gsub(s, '%s+$', '')
+  s = string.gsub(s, '//', '/')
+  s = string.gsub(s, '[\n\r]+', '||')
+
+  vim.cmd("redraw")
+
+  return M.split(s, '||')
+end
+
+
+function M.split(s, delimiter)
+  local result = {};
+
+  for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+    table.insert(result, match);
+  end
+
+  return result;
+end
+
 function M.isfile(path)
   return vim.fn.filereadable(path)
 end

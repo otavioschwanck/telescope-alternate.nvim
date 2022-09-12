@@ -11,7 +11,7 @@ local functions = function()
   return funcs
 end
 
-M.action_types = { "switch", "create", "create_on_dir" }
+M.action_types = { "switch", "create", "create_on_dir", "create_using_regexp" }
 
 function M.in_array(arr, element)
   for i = 1, #arr, 1 do
@@ -52,12 +52,24 @@ function M.parse_available_matches(config)
 
       table.insert(actions, { path = t, type = M.action_types[3], prefix = "[new at dir] " })
     else
-      local last_char = string.sub(t, -1, -1)
+      if #{ string.match(t, "%*%*/%*"), string.match(t, "%*") } > 0 then
+        local results = utils.capture(t)
 
-      if last_char == '/' then
-        table.insert(actions, { path = t, type = M.action_types[3], prefix = "[new at dir] " })
+        for r = 1, #results, 1 do
+          if utils.isfile(results[r]) then
+            table.insert(actions, { path = results[r], type = M.action_types[1] })
+          end
+        end
+
+        table.insert(actions, { path = t, type = M.action_types[4], prefix = "[new]" })
       else
-        table.insert(actions, { path = t, type = M.action_types[2], prefix = "[new] " })
+        local last_char = string.sub(t, -1, -1)
+
+        if last_char == '/' then
+          table.insert(actions, { path = t, type = M.action_types[3], prefix = "[new at dir] " })
+        else
+          table.insert(actions, { path = t, type = M.action_types[2], prefix = "[new] " })
+        end
       end
     end
   end
@@ -122,6 +134,44 @@ function M.go_to_selection(selection)
 
       vim.cmd("e " .. file_name .. "/" .. new_file_name)
       vim.notify(file_name .. ' created!')
+    end
+  elseif type == M.action_types[4] then
+    local completed = false
+    local answer = ''
+    local path
+
+    while not completed do
+      path = selection.path
+
+      while string.match(path, "%*%*/%*") or string.match(path, "%*") do
+        local input
+
+        if string.match(path, "%*%*/%*") then
+          input = "**/*"
+        else
+          input = "*"
+        end
+
+        local replace_for = vim.fn.input("Change first ocurrence of " .. input .. " in " .. path .. ' (Can be leaved blank): ')
+
+        local fixed_input = string.gsub(input, "%*", "%%*")
+
+        path = string.gsub(path, fixed_input, replace_for, 1)
+      end
+
+      answer = vim.fn.input("Path " .. path .. " is correct? y/n/c: ")
+
+      if answer == "y" or answer == "c" then
+        completed = true
+      end
+    end
+
+    if answer == "y" then
+      if not utils.isfile(path) then
+        vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
+      end
+
+      vim.cmd("e " .. path)
     end
   end
 end

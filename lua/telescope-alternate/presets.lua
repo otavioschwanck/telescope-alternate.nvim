@@ -2,10 +2,11 @@ local M = {}
 
 M.rails = {
   { "app/models/(.*).rb", {
-      "app/controllers/[1:pluralize]_controller.rb",
-      "app/views/[1:pluralize]/",
+      "app/controllers/**/*[1:pluralize]_controller.rb",
+      "app/views/**/*[1:pluralize]/",
       "app/helpers/[1]_helper.rb",
-      "app/serializers/[1]_serializer.rb",
+      "app/serializers/**/*[1]_serializer.rb",
+      "db/migrate/**/*[1]*.rb"
   } },
   { "app/controllers/(.*)_controller.rb", {
       "app/models/[1:singularize].rb",

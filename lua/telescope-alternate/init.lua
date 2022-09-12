@@ -10,7 +10,9 @@ function M.setup(opts)
   local presets = require('telescope-alternate.presets')
 
   for i = 1, #enabled_presets, 1 do
-    for k,v in pairs(presets[enabled_presets[i]]) do mappings[k] = v end
+    for __, v in pairs(presets[enabled_presets[i]]) do
+      table.insert(mappings, v)
+    end
   end
 
   vim.g.telescope_alternate_transformers = opts.transformers
