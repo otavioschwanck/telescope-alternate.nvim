@@ -20,7 +20,13 @@ function M.alternate(alt_opts)
       finder = finders.new_table {
         results = results,
         entry_maker = function(entry)
-          return { value = entry.path, display = (entry.prefix or "") .. entry.path, ordinal = (entry.prefix or "") .. entry.path, entry = entry }
+          local prefix = ''
+
+          if entry.prefix then
+            prefix = entry.prefix .. ' '
+          end
+
+          return { value = entry.path, display = prefix .. entry.label, ordinal = (entry.prefix or "") .. entry.path .. entry.label, entry = entry }
         end
       },
       sorter = conf.generic_sorter(opts),

@@ -4,6 +4,35 @@ function M.isdir(path)
   return vim.fn.isdirectory(path)
 end
 
+function M.path_difference(old, new)
+  ---@diagnostic disable-next-line: redefined-local
+  local old = old:gsub("%*%*/%*", ""):gsub("%*", "")
+
+  local splittedOld = M.split(old, "/")
+  local splittedNew = M.split(new, "/")
+
+  local words = {}
+  local jumps = 0
+
+  for i = 1, #splittedNew, 1 do
+    if not (splittedOld[i] == splittedNew[i + jumps]) then
+      local completed = false
+
+      while not completed do
+        if not (splittedOld[i] == splittedNew[i + jumps]) and splittedNew[i + jumps] ~= nil then
+          local newString = splittedNew[i + jumps]:gsub(splittedOld[i] or '', '')
+          table.insert(words, newString)
+          jumps = jumps + 1
+        else
+          completed = true
+        end
+      end
+    end
+  end
+
+  return words
+end
+
 function M.capture(path)
   local s = vim.fn.system("find " .. path)
 

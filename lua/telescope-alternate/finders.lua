@@ -37,38 +37,59 @@ function M.parse_available_matches(config)
   end
 
   for i = 1, #targets_with_matches do
-    local t = targets_with_matches[i]
+    local target = targets_with_matches[i]
+    local full_path = target[1]
+    local label = target[2]
+    local ignoreCreate = target[3]
 
-    if utils.isfile(t) ~= 0 then
-      table.insert(actions, { path = t, type = M.action_types[1] })
-    elseif utils.isdir(t) ~= 0 then
-      local files = utils.files_in_path(t)
+    if utils.isfile(full_path) ~= 0 then
+      table.insert(actions, { path = full_path, type = M.action_types[1], label = label })
+    elseif utils.isdir(full_path) ~= 0 then
+      local files = utils.files_in_path(full_path)
 
       for z = 1, #files, 1 do
         if utils.isfile(files[z]) ~= 0 then
-          table.insert(actions, { path = files[z], type = M.action_types[1] })
+          table.insert(actions, { path = files[z], type = M.action_types[1], label = label })
         end
       end
 
-      table.insert(actions, { path = t, type = M.action_types[3], prefix = "[new at dir] " })
+      if not ignoreCreate then
+        table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW", label = label })
+      end
     else
-      if #{ string.match(t, "%*%*/%*"), string.match(t, "%*") } > 0 then
-        local results = utils.capture(t)
+      if #{ string.match(full_path, "%*%*/%*"), string.match(full_path, "%*") } > 0 then
+        local results = utils.capture(full_path)
 
         for r = 1, #results, 1 do
           if utils.isfile(results[r]) then
-            table.insert(actions, { path = results[r], type = M.action_types[1] })
+            local file_label
+
+            if label == full_path then
+              file_label = label
+            else
+              local differences = table.concat(utils.path_difference(full_path, results[r]), ' ')
+
+              if differences ~= '' then
+                file_label = label .. ': ' .. differences
+              else
+                file_label = label
+              end
+            end
+
+            table.insert(actions, { path = results[r], type = M.action_types[1], label = file_label })
           end
         end
 
-        table.insert(actions, { path = t, type = M.action_types[4], prefix = "[new]" })
-      else
-        local last_char = string.sub(t, -1, -1)
+        if not ignoreCreate then
+          table.insert(actions, { path = full_path, type = M.action_types[4], prefix = "NEW", label = label })
+        end
+      elseif not ignoreCreate then
+        local last_char = string.sub(full_path, -1, -1)
 
         if last_char == '/' then
-          table.insert(actions, { path = t, type = M.action_types[3], prefix = "[new at dir] " })
+          table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW AT", label = label })
         else
-          table.insert(actions, { path = t, type = M.action_types[2], prefix = "[new] " })
+          table.insert(actions, { path = full_path, type = M.action_types[2], prefix = "NEW", label = label })
         end
       end
     end
@@ -97,7 +118,18 @@ function M.add_matches_to_targets(config)
   local matches = config.matches
 
   for t = 1, #targets do
-    local target = targets[t]
+    local real_target = targets[t]
+    local target
+    local name = real_target
+    local ignoreCreate = false
+
+    if type(real_target) == "string" then
+      target = real_target
+    else
+      target = real_target[1]
+      name = real_target[2]
+      ignoreCreate = real_target[3] or false
+    end
 
     for i = 1, #matches do
       local with_function_regex = "(%[" .. i .. ":[a-zA-Z_1-9]*])"
@@ -107,7 +139,7 @@ function M.add_matches_to_targets(config)
       target = target:gsub(without_function_regex, matches[i])
     end
 
-    table.insert(parsed_targets, target)
+    table.insert(parsed_targets, { target, name, ignoreCreate })
   end
 
   return parsed_targets
@@ -193,6 +225,11 @@ function M.find_alternatve_files()
 
   if #matched_targets then
     local parsed = M.parse_available_matches(matched_targets)
+
+    table.sort(parsed, function(a, b)
+      return a.prefix == nil and b.prefix == 'NEW'
+    end)
+
     return parsed
   end
 
