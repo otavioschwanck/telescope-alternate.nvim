@@ -54,7 +54,7 @@ function M.parse_available_matches(config)
       end
 
       if not ignoreCreate then
-        table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW", label = label })
+        table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW ", label = label })
       end
     else
       if #{ string.match(full_path, "%*%*/%*"), string.match(full_path, "%*") } > 0 then
@@ -81,15 +81,15 @@ function M.parse_available_matches(config)
         end
 
         if not ignoreCreate then
-          table.insert(actions, { path = full_path, type = M.action_types[4], prefix = "NEW", label = label })
+          table.insert(actions, { path = full_path, type = M.action_types[4], prefix = "NEW ", label = label })
         end
       elseif not ignoreCreate then
         local last_char = string.sub(full_path, -1, -1)
 
         if last_char == '/' then
-          table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW AT", label = label })
+          table.insert(actions, { path = full_path, type = M.action_types[3], prefix = "NEW AT ", label = label })
         else
-          table.insert(actions, { path = full_path, type = M.action_types[2], prefix = "NEW", label = label })
+          table.insert(actions, { path = full_path, type = M.action_types[2], prefix = "NEW ", label = label })
         end
       end
     end
@@ -227,7 +227,7 @@ function M.find_alternatve_files()
     local parsed = M.parse_available_matches(matched_targets)
 
     table.sort(parsed, function(a, b)
-      return a.prefix == nil and b.prefix == 'NEW'
+      return a.prefix == nil and b.prefix == 'NEW '
     end)
 
     return parsed

@@ -1,0 +1,65 @@
+===========================================================================================
+*telescope-alternate.nvim*                     is a plugin to switch between related filed.
+
+CONTENTS                                         *cool-substitute()*
+
+1. Setup .................... |telescope-alternate.setup|
+2. Mappings ................. |telescope-alternate.mappings|
+
+===========================================================================================
+SECTION 1: Setup                                                *telescope-alternate.setup*
+
+Examples of setup:
+
+require('telescope-alternate').setup({
+  mappings = {
+    { 'app/services/(.*)_services/(.*).rb', { -- go to services to contracts and models
+      { 'app/contracts/[1]_contracts/[2].rb', 'Contract' },
+      { 'app/models/**/*[1].rb', 'Model', true },
+    } },
+    { 'app/contracts/(.*)_contracts/(.*).rb', { { 'app/services/[1]_services/[2].rb', 'Service' } } }, -- go to contracts to services
+  },
+  presets = { 'rails' } -- add preset for rails projects
+})
+
+require('telescope').load_extension('telescope-alternate')
+
+To use alternate, just run :Telescope telescope-alternate alternate
+
+===========================================================================================
+
+===========================================================================================
+SECTION 2: Mappings                                          *telescope-alternate.mappings*
+
+On setup, inside mappings, the first element is the current file, the seconds element is an table with tables, each table
+is a destination, the destination can be:
+
+Inside mappings, the syntax is:
+
+{ 'current-file', { { 'destination', 'label', ignoreCreate (true or false) } } }
+
+Each `current-file` can have multiple destinations.
+
+On `current-file`, each (.*) is a match.
+
+On `destination`, each [1], [2], [3] is the text matched text of `current-file` (by order)
+
+You can run some transformers on the destination, using :function-name, example: [1:singularize]
+
+The available functions are:
+
+| Function Name  | Description           |
+|----------------|-----------------------|
+| camel_to_kebap | userName -> user-name |
+| kebap_to_camel | user-name -> userName |
+| pluralize      | userName -> userNames |
+| singularize    | userNames -> userName |
+
+The destination also can be a folder, if it is, you will input the file name to create inside folder.
+
+Example:
+
+{ 'app/models/(.*).rb', {
+  { 'db/helpers/**/*[1]*.rb', 'Helper' } }, -- using regexp.
+  { 'db/views/[1:pluralize], 'View' } }, -- Creating / switching to a view for the model.
+  { 'app/controllers/**/*[1:pluralize]_controller.rb', 'Controller' } }, -- any controller that contains the model name.
