@@ -39,6 +39,9 @@ require('telescope-alternate').setup({
 require('telescope').load_extension('telescope-alternate')
 ```
 
+To run alternate, just type:
+:Telescope telescope-alternate alternate
+
 # How to use?
 
 Inside mappings, the syntax is:
