@@ -1,6 +1,10 @@
 local M = {}
 
 function M.setup(opts)
+  if not opts.mappings and not opts.presets then
+    return
+  end
+
   local mappings = opts.mappings or {}
   local enabled_presets = opts.presets or {}
   local presets = require('telescope-alternate.presets')
