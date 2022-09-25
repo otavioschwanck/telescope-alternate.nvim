@@ -29,7 +29,7 @@ require('telescope-alternate').setup({
       { 'app/models/(.*).rb', { { 'db/helpers/**/*[1:pluralize]*.rb', 'Helper' } } },
       { 'app/**/*.rb', { { 'spec/[1].rb', 'Test' } } }, -- Alternate between file and test
     },
-    presets = { 'rails' }, -- Telescope pre-defined mapping presets
+    presets = { 'rails', 'nestjs' }, -- Telescope pre-defined mapping presets
     transformers = { -- custom transformers
       change_to_uppercase = function(w) return my_uppercase_method(w) end
     }
@@ -37,6 +37,20 @@ require('telescope-alternate').setup({
 
 -- On your telescope:
 require('telescope').load_extension('telescope-alternate')
+
+
+-- You alternatively can call the setup inside telescope:
+require('telescope').setup{
+  extensions = {
+    ["telescope-alternate"] = {
+      mappings = {
+        ...your mappings
+      },
+      presets = { 'rails', 'nestjs' }
+    },
+  },
+}
+
 ```
 
 To run alternate, just type:

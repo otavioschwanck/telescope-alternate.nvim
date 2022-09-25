@@ -21,15 +21,15 @@ M.rails = {
 }
 
 M.nestjs = {
-  	{ 'src/(.*)/(.*)([.].*).ts', {
-			{ "src/[1]/[2].service.ts", "Service" },
-			{ "src/[1]/[2].guard.ts", "Guard" },
-			{ "src/[1]/[2].module.ts", "Module" },
-			{ "src/[1]/[2].controller.spec.ts", "Test" },
-			{ "src/[1]/[2].controller.ts", "Controller" },
-			{ "src/[1]/[2].strategy.ts", "Strategy" },
-			{ "src/[1]/[2].logger.ts", "Logger" },
-		} }
+  { 'src/(.*)/(.*)([.].*).ts', {
+    { "src/[1]/[2].service.ts", "Service" },
+    { "src/[1]/[2].guard.ts", "Guard" },
+    { "src/[1]/[2].module.ts", "Module" },
+    { "src/[1]/[2].controller.spec.ts", "Test" },
+    { "src/[1]/[2].controller.ts", "Controller" },
+    { "src/[1]/[2].strategy.ts", "Strategy" },
+    { "src/[1]/[2].logger.ts", "Logger" },
+  } }
 }
 
 return M
