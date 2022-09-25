@@ -107,9 +107,15 @@ function M.parse_available_matches(config)
 end
 
 function M.run_functions_on_matches(match, w)
-  local fn = w:match("%d:(.+)]")
+  local fns = w:match("%d:(.+)]")
 
-  return functions()[fn](match)
+  local res = match
+  local regxEverythingExceptComma = '([^,]+)'
+  for fn in string.gmatch(fns, regxEverythingExceptComma) do
+    res = functions()[fn](res)
+  end
+
+  return res
 end
 
 function M.add_matches_to_targets(config)
@@ -132,7 +138,7 @@ function M.add_matches_to_targets(config)
     end
 
     for i = 1, #matches do
-      local with_function_regex = "(%[" .. i .. ":[a-zA-Z_1-9]*])"
+      local with_function_regex = "(%[" .. i .. ":[,a-zA-Z_1-9]*])"
       local without_function_regex = "(%[" .. i .. "])"
 
       target = target:gsub(with_function_regex, function(w) return M.run_functions_on_matches(matches[i], w) end)
