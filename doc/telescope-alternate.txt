@@ -44,7 +44,7 @@ On `current-file`, each (.*) is a match.
 
 On `destination`, each [1], [2], [3] is the text matched text of `current-file` (by order)
 
-You can run some transformers on the destination, using :function-name, example: [1:singularize]
+You can run some transformers on the destination, using :function-name, example: [1:singularize] or [1:singularize,camel_to_kebap]
 
 The available functions are:
 
