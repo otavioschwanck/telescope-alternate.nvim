@@ -214,12 +214,35 @@ function M.go_to_selection(selection)
   end
 end
 
+function M.normalize_config(config)
+  local new_config = {}
+
+  for i = 1, #config do
+    if config[i].pattern then
+      local items = {}
+      local targets = config[i].targets
+
+      for z = 1, #targets do
+        table.insert(items, { targets[z].template, targets[z].label, targets[z].enable_new or false })
+      end
+
+      table.insert(new_config, { config[i].pattern, items })
+    else
+      table.insert(new_config, config[i])
+    end
+  end
+
+  return new_config
+end
+
 function M.find_alternatve_files()
   local current_file_name = utils.current_file_name()
 
   local matched_targets = {}
   local matched_strings = {}
   local config = vim.g.telescope_alternate_mappings or {}
+
+  config = M.normalize_config(config)
 
   for i = 1, #config, 1 do
     matched_strings = { string.match(current_file_name, utils.normalize_path(config[i][1])) }
