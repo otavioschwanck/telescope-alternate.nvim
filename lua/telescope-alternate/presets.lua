@@ -21,35 +21,12 @@ M.rails = {
 }
 
 M.rspec = {
-  { "app/models/(.*).rb", {
-    { "spec/models/[1]_spec.rb", "Test" }
-  } },
-  { "spec/models/(.*)_spec.rb", {
-    { "app/models/[1].rb", "Original" },
-  } },
+  { "app/(.*).rb", { { "spec/[1]_spec.rb", "Test" } } },
   { "app/controllers/(.*)_controller.rb", {
-    { "spec/requests/[1]_spec.rb", "Test" }
+    { "spec/requests/[1]_spec.rb", "Request Test" }
   } },
   { "spec/requests/(.*)_spec.rb", {
-    { "app/controllers/[1]_controller.rb", "Original" },
-  } },
-  { "app/jobs/(.*).rb", {
-    { "spec/jobs/[1]_spec.rb", "Test" }
-  } },
-  { "spec/jobs/(.*)_spec.rb", {
-    { "app/jobs/[1].rb", "Original" },
-  } },
-  { "app/services/(.*).rb", {
-    { "spec/services/[1]_spec.rb", "Test" }
-  } },
-  { "spec/services/(.*)_spec.rb", {
-    { "app/services/[1].rb", "Original" },
-  } },
-  { "app/mailers/(.*).rb", {
-    { "spec/mailers/[1]_spec.rb", "Test" }
-  } },
-  { "spec/mailers/(.*)_spec.rb", {
-    { "app/mailers/[1].rb", "Original" },
+    { "app/controllers/[1]_controller.rb", "Controller Test" },
   } },
 }
 
