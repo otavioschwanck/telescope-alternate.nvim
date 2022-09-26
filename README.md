@@ -29,7 +29,7 @@ require('telescope-alternate').setup({
       { 'app/models/(.*).rb', { { 'db/helpers/**/*[1:pluralize]*.rb', 'Helper' } } },
       { 'app/**/*.rb', { { 'spec/[1].rb', 'Test' } } }, -- Alternate between file and test
     },
-    presets = { 'rails', 'nestjs' }, -- Telescope pre-defined mapping presets
+    presets = { 'rails', 'rspec', 'nestjs' }, -- Telescope pre-defined mapping presets
     transformers = { -- custom transformers
       change_to_uppercase = function(w) return my_uppercase_method(w) end
     }
