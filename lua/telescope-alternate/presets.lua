@@ -22,13 +22,9 @@ M.rails = {
 
 M.rspec = {
   { 'app/(.*).rb', { { 'spec/[1]_spec.rb', 'Test' } } },
-  { 'spec/(.*)_spec.rb', { { 'app/[1].rb', 'Original' } } },
-  { 'app/controllers/(.*)_controller.rb', {
-    { 'spec/requests/[1]_spec.rb', 'Request Test' }
-  } },
-  { 'spec/requests/(.*)_spec.rb', {
-    { 'app/controllers/[1]_controller.rb', 'Original' },
-  } },
+  { 'spec/(.*)_spec.rb', { { 'app/[1].rb', 'Original', true } } },
+  { 'app/controllers/(.*)_controller.rb', { { 'spec/requests/[1]_spec.rb', 'Request Test' } } },
+  { 'spec/requests/(.*)_spec.rb', { { 'app/controllers/[1]_controller.rb', 'Original', true }, } },
 }
 
 M.nestjs = {
