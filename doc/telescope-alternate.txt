@@ -24,7 +24,7 @@ require('telescope-alternate').setup({
 
 require('telescope').load_extension('telescope-alternate')
 
-To use alternate, just run :Telescope telescope-alternate alternate
+To use alternate, just run :Telescope telescope-alternate alternate_file
 
 ===========================================================================================
 
