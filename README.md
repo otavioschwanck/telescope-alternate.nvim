@@ -70,7 +70,7 @@ mappings = {
 To run alternate, just type:
 
 ```vim
-:Telescope telescope-alternate alternate
+:Telescope telescope-alternate alternate_file
 ```
 
 # How to use?
