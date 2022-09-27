@@ -65,8 +65,13 @@ mappings = {
 
 ```
 
+# Running telescope alternate
+
 To run alternate, just type:
+
+```vim
 :Telescope telescope-alternate alternate
+```
 
 # How to use?
 
