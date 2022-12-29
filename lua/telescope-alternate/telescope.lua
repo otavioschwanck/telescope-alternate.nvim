@@ -25,8 +25,6 @@ function M.alternate(alt_opts)
       end
     end
 
-    print('biggest' .. biggest)
-
     for i = 1, #results do
       local spaces = ""
 
