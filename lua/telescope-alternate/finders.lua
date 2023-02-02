@@ -40,7 +40,7 @@ function M.parse_available_matches(config)
     local target = targets_with_matches[i]
     local full_path = target[1]
     local label = target[2]
-    local ignoreCreate = target[3]
+    local ignoreCreate = not(target[3])
 
     if utils.isfile(full_path) ~= 0 then
       table.insert(actions, { path = full_path, type = M.action_types[1], label = label })
@@ -223,7 +223,7 @@ function M.normalize_config(config)
       local targets = config[i].targets
 
       for z = 1, #targets do
-        table.insert(items, { targets[z].template, targets[z].label, targets[z].enable_new or false })
+        table.insert(items, { targets[z].template, targets[z].label, targets[z].enable_new or true })
       end
 
       table.insert(new_config, { config[i].pattern, items })
