@@ -54,7 +54,7 @@ require('telescope').setup{
 -- You also can use the verbose way to mapping:
 mappings = {
   { pattern = 'app/services/(.*)_services/(.*).rb', targets = {
-      { template =  'app/contracts/[1]_contracts/[2].rb', label = 'Contract', enable_new = true }
+      { template =  'app/contracts/[1]_contracts/[2].rb', label = 'Contract', enable_new = true } -- enable_new can be a function too.
     }
   },
   { pattern = 'app/contracts/(.*)_contracts/(.*).rb', targets = {

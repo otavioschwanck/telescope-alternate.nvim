@@ -40,7 +40,13 @@ function M.parse_available_matches(config)
     local target = targets_with_matches[i]
     local full_path = target[1]
     local label = target[2]
-    local ignoreCreate = not(target[3])
+    local ignoreCreate
+
+    if type(target[3]) == 'function' then
+      ignoreCreate = not(target[3]())
+    else
+      ignoreCreate = not(target[3])
+    end
 
     if utils.isfile(full_path) ~= 0 then
       table.insert(actions, { path = full_path, type = M.action_types[1], label = label })
