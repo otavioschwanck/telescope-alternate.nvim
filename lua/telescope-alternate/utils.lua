@@ -76,7 +76,11 @@ end
 function M.normalize_path(text)
   local s = text
 
-  s = string.gsub(s, '%-', '%%-')
+  -- Only target literal parts of the path (i.e exclude lua patterns)
+  -- This assumes that in the literal part of the path the `-` will be preceeded
+  -- by only alphanumeric characters. It also assumes that lua patters will only 
+  -- ever have an alpha-numeric char preceeding the `-` special character.
+  s = string.gsub(s, "(%x)%-", "%1%%-")
 
   return s
 end
