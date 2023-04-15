@@ -6,7 +6,7 @@ local functions = function()
   local user_functions = vim.g.telescope_alternate_transformers or {}
   local funcs = require('telescope-alternate.functions')
 
-  for k,v in pairs(user_functions) do funcs[k] = v end
+  for k, v in pairs(user_functions) do funcs[k] = v end
 
   return funcs
 end
@@ -43,9 +43,9 @@ function M.parse_available_matches(config)
     local ignoreCreate
 
     if type(target[3]) == 'function' then
-      ignoreCreate = not(target[3]())
+      ignoreCreate = not (target[3]())
     else
-      ignoreCreate = not(target[3])
+      ignoreCreate = not (target[3])
     end
 
     if utils.isfile(full_path) ~= 0 then
@@ -157,14 +157,26 @@ function M.add_matches_to_targets(config)
   return parsed_targets
 end
 
-function M.go_to_selection(selection)
+function M.go_to_selection(selection, open_command_kind)
+  local open_command
+
+  if open_command_kind == 'horizontal_split' then
+    open_command = 'sp '
+  elseif open_command_kind == 'vertical_split' then
+    open_command = 'vsp '
+  elseif open_command_kind == 'tab' then
+    open_command = 'tabe '
+  else
+    open_command = 'e '
+  end
+
   local type = selection.type
 
   if type == M.action_types[1] then
-    vim.cmd("e " .. selection.path)
+    vim.cmd(open_command .. selection.path)
   elseif type == M.action_types[2] then
     vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
-    vim.cmd("e " .. selection.path)
+    vim.cmd(open_command .. selection.path)
     vim.notify(selection.path .. ' created!')
   elseif type == M.action_types[3] then
     local new_file_name = vim.fn.input('name of the file to create at ' .. selection.path)
@@ -176,7 +188,7 @@ function M.go_to_selection(selection)
         vim.fn.mkdir(file_name, "p")
       end
 
-      vim.cmd("e " .. file_name .. "/" .. new_file_name)
+      vim.cmd(open_command .. file_name .. "/" .. new_file_name)
       vim.notify(file_name .. ' created!')
     end
   elseif type == M.action_types[4] then
@@ -196,7 +208,8 @@ function M.go_to_selection(selection)
           input = "*"
         end
 
-        local replace_for = vim.fn.input("Change first ocurrence of " .. input .. " in " .. path .. ' (Can be leaved blank): ')
+        local replace_for = vim.fn.input("Change first ocurrence of " ..
+        input .. " in " .. path .. ' (Can be leaved blank): ')
 
         local fixed_input = string.gsub(input, "%*", "%%*")
 
@@ -215,7 +228,7 @@ function M.go_to_selection(selection)
         vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
       end
 
-      vim.cmd("e " .. path)
+      vim.cmd(open_command .. path)
     end
   end
 end

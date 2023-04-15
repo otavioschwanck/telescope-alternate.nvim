@@ -30,9 +30,24 @@ require('telescope-alternate').setup({
       { 'app/**/*.rb', { { 'spec/[1].rb', 'Test' } } }, -- Alternate between file and test
     },
     presets = { 'rails', 'rspec', 'nestjs' }, -- Telescope pre-defined mapping presets
+    open_only_one_with = 'current_pane', -- when just have only possible file, open it with.  Can also be horizontal_split and vertical_split
     transformers = { -- custom transformers
       change_to_uppercase = function(w) return my_uppercase_method(w) end
-    }
+    },
+    -- telescope_mappings = { -- Change the telescope mappings
+    --   i = {
+    --     open_current = '<CR>',
+    --     open_horizontal = '<C-s>',
+    --     open_vertical = '<C-v>',
+    --     open_tab = '<C-t>',
+    --   },
+    --   n = {
+    --     open_current = '<CR>',
+    --     open_horizontal = '<C-s>',
+    --     open_vertical = '<C-v>',
+    --     open_tab = '<C-t>',
+    --   }
+    -- }
   })
 
 -- On your telescope:

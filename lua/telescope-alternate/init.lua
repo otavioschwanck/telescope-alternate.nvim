@@ -1,5 +1,22 @@
 local M = {}
 
+M.default_mappings = {
+  i = {
+    open_current = '<CR>',
+    open_horizontal = '<C-s>',
+    open_vertical = '<C-v>',
+    open_tab = '<C-t>',
+  },
+  n = {
+    open_current = '<CR>',
+    open_horizontal = '<C-s>',
+    open_vertical = '<C-v>',
+    open_tab = '<C-t>',
+  }
+}
+
+M.mappings = {}
+
 function M.setup(opts)
   if not opts.mappings and not opts.presets then
     return
@@ -17,6 +34,9 @@ function M.setup(opts)
 
   vim.g.telescope_alternate_transformers = opts.transformers
   vim.g.telescope_alternate_mappings = mappings
+  vim.g.telescope_open_only_one_with = opts.open_only_one_with or 'current_pane'
+
+  M.mappings = opts.telescope_mappings or M.default_mappings
 end
 
 return M
