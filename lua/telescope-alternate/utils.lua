@@ -36,7 +36,7 @@ end
 function M.capture(path)
   local s = vim.fn.system("find " .. path)
 
-  if string.match(s, 'no matches found:') then
+  if vim.v.shell_error ~= 0 then
     return {}
   end
 
@@ -78,7 +78,7 @@ function M.normalize_path(text)
 
   -- Only target literal parts of the path (i.e exclude lua patterns)
   -- This assumes that in the literal part of the path the `-` will be preceeded
-  -- by only alphanumeric characters. It also assumes that lua patters will only 
+  -- by only alphanumeric characters. It also assumes that lua patters will only
   -- ever have an alpha-numeric char preceeding the `-` special character.
   s = string.gsub(s, "(%x)%-", "%1%%-")
 
