@@ -242,7 +242,13 @@ function M.normalize_config(config)
       local targets = config[i].targets
 
       for z = 1, #targets do
-        table.insert(items, { targets[z].template, targets[z].label, targets[z].enable_new or true })
+        local enable_new
+        if targets[z].enable_new == nil then
+          enable_new = true
+        else
+          enable_new = targets[z].enable_new
+        end
+        table.insert(items, { targets[z].template, targets[z].label, enable_new })
       end
 
       table.insert(new_config, { config[i].pattern, items })
