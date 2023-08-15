@@ -39,4 +39,45 @@ M.nestjs = {
   } }
 }
 
+M.angular = {
+  { "src/(.*)/(.*).ts", {
+    { "src/[1]/[2].spec.ts", "Test" },
+  } },
+  { "src/(.*)/(.*).spec.ts", {
+    { "src/[1]/[2].interceptor.ts", "Interceptor" },
+    { "src/[1]/[2].directive.ts", "Directive" },
+    { "src/[1]/[2].guard.ts", "Guard" },
+    { "src/[1]/[2].pipe.ts", "Pipe" },
+    { "src/[1]/[2].ts", "Class" },
+  } },
+  { "src/(.*)/(.*).component.(.*)", {
+    { "src/[1]/[2].module.ts", "Module" },
+    { "src/[1]/[2].component.ts", "Component" },
+    { "src/[1]/[2].service.ts", "Service" },
+    { "src/[1]/[2].component.html", "Template" },
+    { "src/[1]/[2].component.css", "Styles" },
+    { "src/[1]/[2].component.scss", "Styles" },
+    { "src/[1]/[2]-routing.module.ts", "Routing" },
+  } },
+  { "src/(.*)/(.*).service.ts", {
+    { "src/[1]/[2].module.ts", "Module" },
+    { "src/[1]/[2].component.ts", "Component" },
+    { "src/[1]/[2].component.html", "Template" },
+    { "src/[1]/[2].component.css", "Styles" },
+    { "src/[1]/[2].component.scss", "Styles" },
+    { "src/[1]/[2].component.spec.ts", "Test" },
+    { "src/[1]/[2]-routing.module.ts", "Routing" },
+  } },
+  { "src/(.*)/(.*).module.ts", {
+    { "src/[1]/[2].component.ts", "Component" },
+    { "src/[1]/[2].service.ts", "Service" },
+    { "src/[1]/[2].component.html", "Template" },
+    { "src/[1]/[2].component.css", "Styles" },
+    { "src/[1]/[2].component.scss", "Styles" },
+    { "src/[1]/[2].component.spec.ts", "Test" },
+    { "src/[1]/[2]-routing.module.ts", "Routing" },
+  } },
+}
+
+
 return M
