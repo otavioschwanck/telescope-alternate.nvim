@@ -29,7 +29,7 @@ require('telescope-alternate').setup({
       { 'app/models/(.*).rb', { { 'db/helpers/**/*[1:pluralize]*.rb', 'Helper' } } },
       { 'app/**/*.rb', { { 'spec/[1].rb', 'Test' } } }, -- Alternate between file and test
     },
-    presets = { 'rails', 'rspec', 'nestjs' }, -- Telescope pre-defined mapping presets
+    presets = { 'rails', 'rspec', 'nestjs', 'angular' }, -- Telescope pre-defined mapping presets
     open_only_one_with = 'current_pane', -- when just have only possible file, open it with.  Can also be horizontal_split and vertical_split
     transformers = { -- custom transformers
       change_to_uppercase = function(w) return my_uppercase_method(w) end
