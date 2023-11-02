@@ -39,6 +39,11 @@ M.nestjs = {
   } }
 }
 
+M.go = {
+  { "(.*).go", { { "[1]_test.go", "Test" } } },
+  { "(.*)_test.go", { { "[1].go", "Original", true } } },
+}
+
 M.angular = {
   { "src/(.*)/(.*).ts", {
     { "src/[1]/[2].spec.ts", "Test" },
