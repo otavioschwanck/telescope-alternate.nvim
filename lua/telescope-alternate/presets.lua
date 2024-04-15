@@ -39,8 +39,12 @@ M.nestjs = {
   } }
 }
 
+local exclude_test_file = function()
+  return not string.match(vim.api.nvim_buf_get_name(0), ".*_test.go")
+end
+
 M.go = {
-  { "(.*).go", { { "[1]_test.go", "Test" } } },
+  { "(.*).go", { { "[1]_test.go", "Test", exclude_test_file } } },
   { "(.*)_test.go", { { "[1].go", "Original", true } } },
 }
 
