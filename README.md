@@ -21,7 +21,12 @@ require('telescope-alternate').setup({
     mappings = {
       { 'app/services/(.*)_services/(.*).rb', { -- alternate from services to contracts / models
         { 'app/contracts/[1]_contracts/[2].rb', 'Contract' }, -- Adding label to switch
-        { 'app/models/**/*[1].rb', 'Model', true }, -- Ignore create entry (with true)
+        {
+          'app/models/**/*[1].rb',
+          'Model',
+          true, -- Ignore create entry (with true)
+          1 -- order is optional should be a number. Items with lower order will be shown before items with higher order
+        },
       } },
       { 'app/contracts/(.*)_contracts/(.*).rb', { { 'app/services/[1]_services/[2].rb', 'Service' } } }, -- from contracts to services
       -- Search anything on helper folder that contains pluralize version of model.
@@ -69,7 +74,12 @@ require('telescope').setup{
 -- You also can use the verbose way to mapping:
 mappings = {
   { pattern = 'app/services/(.*)_services/(.*).rb', targets = {
-      { template =  'app/contracts/[1]_contracts/[2].rb', label = 'Contract', enable_new = true } -- enable_new can be a function too.
+      {
+         template =  'app/contracts/[1]_contracts/[2].rb',
+         label = 'Contract',
+         enable_new = true, -- enable_new can be a function too.
+         order = 1 -- order is optional should be a number. Items with lower order will be shown before items with higher order
+      }
     }
   },
   { pattern = 'app/contracts/(.*)_contracts/(.*).rb', targets = {
