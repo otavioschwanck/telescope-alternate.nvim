@@ -44,8 +44,13 @@ local exclude_test_file = function()
 end
 
 M.go = {
+  -- Tests
   { "(.*).go", { { "[1]_test.go", "Test", exclude_test_file } } },
   { "(.*)_test.go", { { "[1].go", "Original", true } } },
+  -- Gomod/sum
+  { "go.mod", { { "go.sum", "Sum file" } } },
+  { "go.sum", { { "go.mod", "Module file" } } },
+
 }
 
 M.angular = {
