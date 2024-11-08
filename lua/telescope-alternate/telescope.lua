@@ -94,7 +94,7 @@ function M.alternate(alt_opts)
       end,
     }):find()
   else
-    vim.notify("This file doesn't matches any alternate")
+    vim.notify("This file doesn't match any alternate.")
   end
 end
 
