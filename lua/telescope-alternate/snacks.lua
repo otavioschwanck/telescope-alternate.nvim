@@ -38,7 +38,13 @@ local function removeCommonPrefix(nestedStrings)
     -- Create new list with common prefix removed
     local result = {}
     for i, item in ipairs(nestedStrings) do
-        local newItem = { short_path = item.path:sub(prefixLen + 1), path=item.path, label = item.label, order = item.order }
+        local newItem = {
+            short_path = item.path:sub(prefixLen + 1),
+            path = item.path,
+            label = item.label,
+            order = item
+                .order
+        }
         table.insert(result, newItem)
     end
 
@@ -77,6 +83,31 @@ M.alternate = function()
                 },
             },
         },
+
+        -- win = {
+        --     -- input window
+        --     input = {
+        --         keys = {
+        --
+        --             ["<c-\\>"] = { "flash", mode = { "n", "i" } },
+        --             ["<c-s>"] = { "split", mode = { "n", "i" } },
+        --             ["<c-v>"] = { "vsplit", mode = { "n", "i" } },
+        --         }
+        --     }
+        -- },
+        --
+        -- list = {
+        --     -- input window
+        --     input = {
+        --         keys = {
+        --
+        --             ["<c-\\>"] = { "flash", mode = { "n", "i" } },
+        --             ["<c-s>"] = { "split", mode = { "n", "i" } },
+        --             ["<c-v>"] = { "vsplit", mode = { "n", "i" } },
+        --         }
+        --     }
+        -- },
+
         format = function(item, _)
             local file = item.file
             local ret = {}
@@ -89,13 +120,13 @@ M.alternate = function()
 
             return ret
         end,
-        confirm = function(picker, item)
-            picker:close()
-            vim.cmd.edit(item.file)
-            -- Snacks.picker.pick("files", {
-            --     files = { item.file },
-            -- })
-        end,
+        -- confirm = function(picker, item)
+        --     picker:close()
+        --     vim.cmd.edit(item.file)
+        --     -- Snacks.picker.pick("files", {
+        --     --     files = { item.file },
+        --     -- })
+        -- end,
     })
 end
 
