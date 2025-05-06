@@ -1,6 +1,7 @@
 local M = {}
 
 local utils = require('telescope-alternate.utils')
+local defaultOrder = 9999
 
 local functions = function()
   local user_functions = vim.g.telescope_alternate_transformers or {}
@@ -41,6 +42,7 @@ function M.parse_available_matches(config)
     local full_path = target[1]
     local label = target[2]
     local ignoreCreate
+    local order = target[4]
 
     if type(target[3]) == 'function' then
       ignoreCreate = not (target[3]())
@@ -49,13 +51,13 @@ function M.parse_available_matches(config)
     end
 
     if utils.isfile(full_path) ~= 0 then
-      table.insert(actions, { path = full_path, type = M.action_types[1], label = label })
+      table.insert(actions, { path = full_path, type = M.action_types[1], label = label, order = order })
     elseif utils.isdir(full_path) ~= 0 then
       local files = utils.files_in_path(full_path)
 
       for z = 1, #files, 1 do
         if utils.isfile(files[z]) ~= 0 then
-          table.insert(actions, { path = files[z], type = M.action_types[1], label = label })
+          table.insert(actions, { path = files[z], type = M.action_types[1], label = label, order = order})
         end
       end
 
@@ -82,7 +84,7 @@ function M.parse_available_matches(config)
               end
             end
 
-            table.insert(actions, { path = results[r], type = M.action_types[1], label = file_label })
+            table.insert(actions, { path = results[r], type = M.action_types[1], label = file_label, order = order })
           end
         end
 
@@ -151,7 +153,7 @@ function M.add_matches_to_targets(config)
       target = target:gsub(without_function_regex, matches[i])
     end
 
-    table.insert(parsed_targets, { target, name, ignoreCreate })
+    table.insert(parsed_targets, { target, name, ignoreCreate, real_target[4] or defaultOrder })
   end
 
   return parsed_targets
@@ -222,7 +224,6 @@ function M.go_to_selection(selection, open_command_kind)
         completed = true
       end
     end
-
     if answer == "y" then
       if not utils.isfile(path) then
         vim.fn.mkdir(vim.fn.fnamemodify(path, ":h"), "p")
@@ -248,7 +249,14 @@ function M.normalize_config(config)
         else
           enable_new = targets[z].enable_new
         end
-        table.insert(items, { targets[z].template, targets[z].label, enable_new })
+
+        local order
+        if targets[z].order == nil then
+          order = defaultOrder
+        else
+          order = targets[z].order
+        end
+        table.insert(items, { targets[z].template, targets[z].label, enable_new, order })
       end
 
       table.insert(new_config, { config[i].pattern, items })
@@ -281,7 +289,7 @@ function M.find_alternatve_files()
     local parsed = M.parse_available_matches(matched_targets)
 
     table.sort(parsed, function(a, b)
-      return a.prefix == nil and b.prefix == 'NEW '
+      return (a.order and b.order and a.order < b.order) or (a.prefix == nil and b.prefix == 'NEW ')
     end)
 
     return parsed
