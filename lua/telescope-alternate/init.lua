@@ -17,6 +17,16 @@ M.default_mappings = {
 
 M.mappings = {}
 
+function M.alternate_file(opts)
+  local picker = vim.g.telescope_alternate_picker or 'telescope'
+  
+  if picker == 'fzf-lua' then
+    require('telescope-alternate.fzf-lua').alternate(opts)
+  else
+    require('telescope-alternate.telescope').alternate(opts)
+  end
+end
+
 function M.setup(opts)
   if not opts.mappings and not opts.presets then
     return
@@ -35,6 +45,7 @@ function M.setup(opts)
   vim.g.telescope_alternate_transformers = opts.transformers
   vim.g.telescope_alternate_mappings = mappings
   vim.g.telescope_open_only_one_with = opts.open_only_one_with or 'current_pane'
+  vim.g.telescope_alternate_picker = opts.picker or 'telescope'
 
   M.mappings = opts.telescope_mappings or M.default_mappings
 end
