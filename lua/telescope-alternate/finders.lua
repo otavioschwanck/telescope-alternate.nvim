@@ -3,7 +3,8 @@ local M = {}
 local utils = require('telescope-alternate.utils')
 
 local functions = function()
-  local user_functions = vim.g.telescope_alternate_transformers or {}
+  local config = require('telescope-alternate').get_config()
+  local user_functions = config.transformers or {}
   local funcs = require('telescope-alternate.functions')
 
   for k, v in pairs(user_functions) do funcs[k] = v end
@@ -265,7 +266,7 @@ function M.find_alternatve_files()
 
   local matched_targets = {}
   local matched_strings = {}
-  local config = vim.g.telescope_alternate_mappings or {}
+  local config = require('telescope-alternate').get_mappings()
 
   config = M.normalize_config(config)
 

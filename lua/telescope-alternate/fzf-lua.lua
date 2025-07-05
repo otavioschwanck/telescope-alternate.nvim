@@ -19,7 +19,8 @@ function M.alternate(alt_opts)
   end
   
   if #results == 1 and results[1].type == "switch" then
-    alternate.go_to_selection(results[1], vim.g.telescope_open_only_one_with)
+    local config = require('telescope-alternate').get_config()
+    alternate.go_to_selection(results[1], config.open_only_one_with)
     return
   end
   

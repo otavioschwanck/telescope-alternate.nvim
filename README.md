@@ -35,6 +35,42 @@ Plug 'otavioschwanck/telescope-alternate'
 ## Basic Setup
 
 ```lua
+-- Configuration using vim.g (recommended approach)
+vim.g.telescope_alternate = {
+  mappings = {
+    { 'app/services/(.*)_services/(.*).rb', { -- alternate from services to contracts / models
+      { 'app/contracts/[1]_contracts/[2].rb', 'Contract' }, -- Adding label to switch
+      { 'app/models/**/*[1].rb', 'Model', true }, -- Ignore create entry (with true)
+    } },
+    { 'app/contracts/(.*)_contracts/(.*).rb', { { 'app/services/[1]_services/[2].rb', 'Service' } } }, -- from contracts to services
+    -- Search anything on helper folder that contains pluralize version of model.
+    --Example: app/models/user.rb -> app/helpers/foo/bar/my_users_helper.rb
+    { 'app/models/(.*).rb', { { 'db/helpers/**/*[1:pluralize]*.rb', 'Helper' } } },
+    { 'app/**/*.rb', { { 'spec/[1].rb', 'Test' } } }, -- Alternate between file and test
+  },
+  presets = { 'rails', 'rspec', 'nestjs', 'angular' }, -- Pre-defined mapping presets
+  picker = 'telescope', -- or 'fzf-lua'
+  open_only_one_with = 'current_pane', -- when just have only possible file, open it with.  Can also be horizontal_split and vertical_split
+  transformers = { -- custom transformers
+    change_to_uppercase = function(w) return my_uppercase_method(w) end
+  },
+  telescope_mappings = { -- Change the telescope mappings
+    i = {
+      open_current = '<CR>',
+      open_horizontal = '<C-s>',
+      open_vertical = '<C-v>',
+      open_tab = '<C-t>',
+    },
+    n = {
+      open_current = '<CR>',
+      open_horizontal = '<C-s>',
+      open_vertical = '<C-v>',
+      open_tab = '<C-t>',
+    }
+  }
+}
+
+-- Alternative setup method (legacy, still supported)
 require('telescope-alternate').setup({
     mappings = {
       { 'app/services/(.*)_services/(.*).rb', { -- alternate from services to contracts / models
@@ -53,25 +89,25 @@ require('telescope-alternate').setup({
     transformers = { -- custom transformers
       change_to_uppercase = function(w) return my_uppercase_method(w) end
     },
-    -- telescope_mappings = { -- Change the telescope mappings
-    --   i = {
-    --     open_current = '<CR>',
-    --     open_horizontal = '<C-s>',
-    --     open_vertical = '<C-v>',
-    --     open_tab = '<C-t>',
-    --   },
-    --   n = {
-    --     open_current = '<CR>',
-    --     open_horizontal = '<C-s>',
-    --     open_vertical = '<C-v>',
-    --     open_tab = '<C-t>',
-    --   }
-    -- }
+    telescope_mappings = { -- Change the telescope mappings
+      i = {
+        open_current = '<CR>',
+        open_horizontal = '<C-s>',
+        open_vertical = '<C-v>',
+        open_tab = '<C-t>',
+      },
+      n = {
+        open_current = '<CR>',
+        open_horizontal = '<C-s>',
+        open_vertical = '<C-v>',
+        open_tab = '<C-t>',
+      }
+    }
   })
 
 ## Alternative Configuration Methods
 
-### Using Telescope Setup
+### Using Telescope Setup (Legacy)
 ```lua
 require('telescope').setup{
   extensions = {
@@ -104,26 +140,27 @@ mappings = {
 
 ## Using with Telescope
 
-```lua
--- Load the telescope extension
-require('telescope').load_extension('telescope-alternate')
-```
+The plugin automatically loads the telescope extension when available. You can use:
 
-Then run:
 ```vim
 :Telescope telescope-alternate alternate_file
 ```
 
+Or use the provided command:
+```vim
+:TelescopeAlternate
+```
+
 ## Using with fzf-lua
 
+Configure with fzf-lua picker:
 ```lua
--- Setup with fzf-lua
-require('telescope-alternate').setup({
+vim.g.telescope_alternate = {
   picker = 'fzf-lua',
   mappings = {
     -- your mappings here
   }
-})
+}
 ```
 
 Then run:
@@ -136,10 +173,13 @@ Then run:
 You can create convenient key mappings:
 
 ```lua
--- For telescope users
+-- Using the provided command (recommended)
+vim.keymap.set('n', '<leader>ta', ':TelescopeAlternate<CR>', { desc = 'Alternate file' })
+
+-- Or using telescope directly
 vim.keymap.set('n', '<leader>ta', ':Telescope telescope-alternate alternate_file<CR>', { desc = 'Alternate file' })
 
--- For fzf-lua users
+-- Or using lua function directly
 vim.keymap.set('n', '<leader>ta', function() require('telescope-alternate').alternate_file() end, { desc = 'Alternate file' })
 ```
 
